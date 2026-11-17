@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payment status</title>
+</head>
+<body>
+<main>
+    <h1>Payment status</h1>
+    <p id="message" role="status">Checking your payment...</p>
+</main>
+<script>
+    // Read the order ID added by the payment service before redirecting to Stripe.
+    const orderId = new URLSearchParams(window.location.search).get("orderId");
+    const message = document.getElementById("message");
+
+    async function checkPayment() {
+        if (!orderId || !/^\d+$/.test(orderId)) {
+            message.textContent = "We could not find the order ID. Please contact support.";
+            return;
+        }
+
+        try {
+            // Ask the payment service to verify the payment with Stripe.
+            const response = await fetch(
+                `/api/v1/payments/orders/${encodeURIComponent(orderId)}/status`,
+                { headers: { "Accept": "application/json" } }
+            );
+
+            if (!response.ok) {
+                throw new Error("Payment status request failed");
+            }
+
+            const result = await response.json();
+            message.textContent = result.message;
+        } catch (error) {
+            message.textContent =
+                "We could not check the payment right now. Please try again later.";
+        }
+    }
+
+    checkPayment();
+</script>
+</body>
+</html>
