@@ -53,20 +53,20 @@ stored S3 URL identifies the object but does not make a private object public.
 3. Configure the application environment. Set the region to the bucket's
    actual region. The AWS SDK uses its standard credential chain, so
    credentials should not be placed in source code or committed to
-   `application.properties`. If an access key has been shared or exposed,
-   deactivate it and use a replacement key.
+   `application.properties`. For production, prefer an instance/task role
+   with the least privilege needed. If static credentials are unavoidable,
+   keep them in a managed secret store and inject them at runtime. If an access
+   key has been shared or exposed, deactivate it and use a replacement key.
 
    PowerShell (current terminal only):
 
    ```powershell
    $env:AWS_S3_BUCKET = "rovique"
    $env:AWS_REGION = "eu-north-1"
-   $env:AWS_ACCESS_KEY_ID = "YOUR_ACCESS_KEY_ID"
-   $env:AWS_SECRET_ACCESS_KEY = "YOUR_SECRET_ACCESS_KEY"
    ```
 
-   Or store the replacement credentials in a named AWS CLI profile and let the
-   SDK load them without putting the secret in the application configuration:
+   For local development, store credentials outside the repository in a named
+   AWS CLI profile and let the SDK load them:
 
    ```powershell
    aws configure --profile rovi-product
@@ -76,7 +76,8 @@ stored S3 URL identifies the object but does not make a private object public.
    ```
 
    For deployed environments, use an instance/task role instead of access
-   keys. Start the app after setting the environment:
+   keys. See `../SECRETS.md` for managing application secrets and injecting
+   them at runtime. Start the app after setting the environment:
 
    ```powershell
    .\mvnw.cmd spring-boot:run

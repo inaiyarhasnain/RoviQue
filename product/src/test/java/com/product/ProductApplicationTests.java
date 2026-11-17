@@ -14,7 +14,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 // Start the full Spring application context to check that application wiring works.
-@SpringBootTest
+@SpringBootTest(properties = {
+        "security.jwt.secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "aws.bucket-name=test-bucket"
+})
 @AutoConfigureMockMvc
 class ProductApplicationTests {
 

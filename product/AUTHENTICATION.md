@@ -96,6 +96,14 @@ Required environment variables:
 | `AUTH_JWT_SECRET` | Auth, Gateway, Product, Cart, Order, Payment | Shared Base64 HS256 key (minimum 32 decoded bytes) |
 | `AUTH_DB_USERNAME`, `AUTH_DB_PASSWORD` | Auth | Auth MySQL credentials |
 | `AUTH_DB_URL` | Auth | Optional; defaults to local `auth_db` |
+| `CART_DB_USERNAME`, `CART_DB_PASSWORD` | Cart | Cart MySQL credentials |
+| `CART_DB_URL` | Cart | Optional; defaults to local `cart_db` |
+| `ORDER_DB_USERNAME`, `ORDER_DB_PASSWORD` | Order | Order MySQL credentials |
+| `ORDER_DB_URL` | Order | Optional; defaults to local `order_db` |
+| `PAYMENT_DB_USERNAME`, `PAYMENT_DB_PASSWORD` | Payment | Payment MySQL credentials |
+| `PAYMENT_DB_URL` | Payment | Optional; defaults to local `payment_db` |
+| `PRODUCT_DB_USERNAME`, `PRODUCT_DB_PASSWORD` | Product | Product MySQL credentials |
+| `PRODUCT_DB_URL` | Product | Optional; defaults to local `product_db` |
 | `AUTH_JWT_ISSUER`, `AUTH_JWT_AUDIENCE` | All JWT validators | Must match across applications |
 | `AUTH_JWT_ACCESS_TOKEN_TTL` | Auth | Access-token lifetime; default 15 minutes |
 | `AUTH_REFRESH_TOKEN_TTL` | Auth | Refresh-token lifetime; default 30 days |
@@ -104,6 +112,15 @@ Required environment variables:
 | `STRIPE_SECRET_KEY` | Payment | Stripe API credential |
 | `STRIPE_WEBHOOK_SECRET` | Payment | Secret for verifying `Stripe-Signature` |
 | `STRIPE_PUBLISHABLE_KEY` | Payment | Optional publishable key |
+| `AWS_S3_BUCKET`, `AWS_REGION` | Product | S3 bucket and region; region defaults to `eu-north-1` |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Product (optional) | Local AWS SDK credentials only; prefer an AWS CLI profile or workload role |
+
+Set these values in each service's run configuration for local development.
+For production, store passwords, signing keys, and payment credentials in a
+secret manager such as AWS Secrets Manager and inject them into the service as
+environment variables at startup. Do not copy secret values into this
+document, source control, container images, or logs. See the repository-level
+`SECRETS.md` for setup and rotation guidance.
 
 Auth's principal properties are `auth.jwt.secret=${AUTH_JWT_SECRET}`, `auth.jwt.issuer`, and `auth.jwt.access-token-ttl`. Gateway and downstream services use the corresponding `security.jwt.*` properties. Auth JPA creates/updates the schema by default; configure `AUTH_JPA_DDL_AUTO` appropriately for deployment.
 

@@ -14,7 +14,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 // Start the full Spring application context to check that application wiring works.
-@SpringBootTest(properties = "security.internal.payment-token=test-internal-token")
+@SpringBootTest(properties = {
+        "security.internal.payment-token=test-internal-token",
+        "security.jwt.secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+})
 @AutoConfigureMockMvc
 class OrderApplicationTests {
 
